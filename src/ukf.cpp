@@ -359,6 +359,13 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
     while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
     while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
 
+    double nis = z_diff.transpose()*S.inverse()*z_diff;
+    ofstream of;
+    of.open("NIS_lidar.txt", ios::app);
+    of << nis;
+    of << "\n";
+    of.close();
+
     //update state mean and covariance matrix
     x_ = x_ + K * z_diff;
     P_ = P_ - K*S*K.transpose();
@@ -470,6 +477,13 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
     //angle normalization
     while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
     while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
+
+    double nis = z_diff.transpose()*S.inverse()*z_diff;
+    ofstream of;
+    of.open("NIS_radar.txt", ios::app);
+    of << nis;
+    of << "\n";
+    of.close();
 
     //update state mean and covariance matrix
     x_ = x_ + K * z_diff;
